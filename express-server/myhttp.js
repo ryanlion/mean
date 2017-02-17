@@ -1,6 +1,8 @@
 import { createFetch, base, accept, parse } from 'http-client';
 import * as _ from 'underscore';
+import {History} from './models/chart_history'
 const request = require("es6-request");
+
 
 class MyHttp {
     constructor() {
@@ -26,7 +28,13 @@ class MyHttp {
 
         request.get(url)
             .then((body) => {
-                console.log(body);
+                let results = JSON.parse(body[0])["results"];
+                results.forEach(result => {
+                    var history = new History(result);
+                    console.log(history);
+                })
+
+
                 // should output this README file!
             });
         //this.fetch(url).then(response => {
