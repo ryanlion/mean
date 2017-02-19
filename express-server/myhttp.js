@@ -1,6 +1,6 @@
 import { createFetch, base, accept, parse } from 'http-client';
 import * as _ from 'underscore';
-import {History} from './models/chart_history'
+import {History} from './models/chart_history';
 const request = require("es6-request");
 
 
@@ -17,7 +17,7 @@ class MyHttp {
     }
 
 
-    get(aspect,options) {
+    get(aspect,options,callback) {
         let url = `${aspect}.json?key=${this.barchart_key}`;
         let params = "";
 
@@ -25,18 +25,22 @@ class MyHttp {
             params += `&${key}=${options[key]}`;
         });
         url = this.base_url + url + params;
-
+        let results = {};
         request.get(url)
             .then((body) => {
-                let results = JSON.parse(body[0])["results"];
-                results.forEach(result => {
+                results = JSON.parse(body[0])["results"];
+                /*results.forEach(result => {
                     var history = new History(result);
-                    console.log(history);
-                })
+                    //console.log(history);
+                })*/
 
-
+                return callback(null,results);
                 // should output this README file!
             });
+
+        //console.log(results);
+        //console.log(results);
+        //return results;
         //this.fetch(url).then(response => {
         //console.log(response.jsonData)
         //});
